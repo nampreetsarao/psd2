@@ -1,0 +1,10 @@
+{
+  "name": "psd2",
+  "app_id": "557832ed",
+  "proxies": [
+    {
+      "path": "/authenticate",
+      "proxyUrl": "http://169.44.9.228:8080/mcabuddy/user"
+    }
+  ]
+}
