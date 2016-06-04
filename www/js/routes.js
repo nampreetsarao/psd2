@@ -7,8 +7,16 @@ angular.module('app.routes', [])
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
-    
-  
+
+      .state('menu.profile', {
+    url: '/page6',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/profile.html',
+        controller: 'profileCtrl'
+      }
+    }
+    })
 
       .state('menu.aboutPSD2', {
     url: '/page1',
@@ -60,6 +68,6 @@ angular.module('app.routes', [])
 
 $urlRouterProvider.otherwise('/login')
 
-  
+
 
 });
