@@ -1,8 +1,8 @@
-<ion-view title="Explore API" id="page2" class=" ">
+<ion-view title="Authorize App" id="page2" class=" ">
     <ion-content padding="true" class="has-header">
       <form id="login-form1" class="list ">
 
-        <h5 id="login-heading1" style="color:#F6390C;font-weight:400;text-align:center;" class=" ">{{dataFromService.errMsg}}</h5>
+        <!-- <h5 id="login-heading1" style="color:#F6390C;font-weight:400;text-align:center;" class=" ">{{dataFromService.errMsg}}</h5>
           <ion-list id="login-list1" class=" ">
               <label class="item item-input " id="login-input1">
                   <span class="input-label">API Username</span>
@@ -12,10 +12,11 @@
                   <span class="input-label">API Password</span>
                   <input ng-model="password" type="password" placeholder="">
               </label>
-          </ion-list>
+          </ion-list> -->
           <div class="spacer" style="height: 40px;"></div>
-          <a id="login-button1" ng-click="apiClick()" style="color:#434D43;" class=" button button-balanced  button-block ">Log in</a>
+          <a id="login-button1" ng-click="apiClick()" style="color:#434D43;" class=" button button-balanced  button-block ">Authorize app to access Bank API</a>
       </form>
-
+     <!-- {{requestToken}}
+      {{oauthData}} -->
     </ion-content>
 </ion-view>

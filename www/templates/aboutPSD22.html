@@ -1,18 +1,21 @@
 <ion-view title="About PSD2" id="page3" class=" ">
     <ion-content padding="true" class="has-header">
+
+      <!-- <ion-list>
+  <ion-item ng-repeat="x in allAccountDetails.data">
+  Some data
+  </ion-item>
+  <ion-item href="#/side-menu21/page1">
+    Details
+  </ion-item>
+</ion-list> -->
+
       <!-- {{bookmark.response.addtionalInfo[]}} -->
         <p id="aboutPSD22-markdown2" style="color:#000000;" class=" ">{{general.response.info}}</p>
         <p id="aboutPSD22-markdown2" style="color:#000000;" class=" ">{{ibmInformation.response.info}}</p>
         <p id="aboutPSD22-markdown2" style="color:#000000;" class=" " ng-repeat="x in bookmarks">
               <strong>{{x.name}}</strong>
-              <a href={{x.link}}>link</a>.</p>
-        </p>
-        <p id="aboutPSD22-markdown3" style="color:#000000;" class=" ">
-            <strong>What this means to customers?</strong>
-            <a href="http://ec.europa.eu/finance/payments/docs/framework/psd_consumers/psd_en.pdf">link</a>.</p>
-        <p id="aboutPSD22-markdown4" style="color:#000000;" class=" ">
-            <strong>Impact to United Kingdom</strong>
-            <a href="http://ec.europa.eu/finance/payments/docs/framework/transposition/united_kingdom_en.pdf">link</a>
+              <a ng-click="window.cordova.InAppBrowser.open('{{x.link}}', '_blank', 'location=no,clearsessioncache=yes,clearcache=yes,toolbar=yes');">link</a>.</p>
         </p>
     </ion-content>
 </ion-view>

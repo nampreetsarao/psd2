@@ -66,8 +66,18 @@ angular.module('app.routes', [])
     controller: 'signupCtrl'
   })
 
+
+  .state('menu.showAllAccounts', {
+  url: '/showAllAccounts',
+  views: {
+  'side-menu21': {
+    templateUrl: 'templates/showAllAccounts.html',
+    controller: 'showAllAccountCtrl'
+  }
+  }
+  })
+
+
+
 $urlRouterProvider.otherwise('/login')
-
-
-
 });

@@ -1,102 +1,193 @@
 angular.module('app.controllers', [])
 
-.controller('aboutPSD2Ctrl', function($scope) {
+.controller('showAllAccountCtrl', function($scope,StorageServiceForToken,$state,$http,AccountDetails,$resource,$ionicPopup) {
+  $scope.allAccountDetails=[];
+  $scope.oauthData = StorageServiceForToken.getAll();
+  if($scope.oauthData!=null){
+      $scope.authorizationToken = 'Bearer '+ $scope.oauthData[0].access_token;
+      //$resource.authorizationToken = $scope.authorizationToken ;
+  }else{
+    $scope.allAccountDetails='First authenticate and then make this call.';
+  }
+  $http.defaults.headers.common.Authorization=$scope.authorizationToken;
+  $http.get('http://169.44.112.56:8082/psd2api/my/banks/BARCGB/accounts').then(function(resp){
+  		console.log('Success', resp); // JSON object
+      $scope.allAccountDetails=resp;
+  	}, function(err){
+  		console.error('ERR', err);
+      var alertPopup = $ionicPopup.alert({
+        title: 'Show all accounts: Alert',
+        template:'Error occured while calling the API:'+err
+      });
+  	});
+
+  
+
+  })
 
 
-})
+.controller('aboutPSD2Ctrl', function($scope,StorageServiceForToken,$http,AccountDetails,$resource,$ionicPopup) {
+  $scope.accountDetails=[];
 
-.controller('exploreAPICtrl', function($scope) {
+  $scope.oauthData = StorageServiceForToken.getAll();
+  if($scope.oauthData!=null){
+      $scope.authorizationToken = 'Bearer '+ $scope.oauthData[0].access_token;
+      //$resource.authorizationToken = $scope.authorizationToken ;
+  }else{
+    $scope.accountDetails='First authenticate and then make this call.';
+  }
+  $http.defaults.headers.common.Authorization=$scope.authorizationToken;
+  $http.get('http://169.44.112.56:8082/psd2api/banks/BARCGB/accounts/5437/owner/account').then(function(resp){
+  		console.log('Success', resp); // JSON object
+      $scope.accountDetails=resp;
+  	}, function(err){
+  		console.error('ERR', err);
+      var alertPopup = $ionicPopup.alert({
+        title: 'Alert',
+        template:'Did you authorize the app to access bank information? Error occured while calling the API:'+err.data.error+ ".More: "+err.statusText
+      });
+  	})
 
-})
+  })
 
-.controller('aboutPSD22Ctrl', function($scope, InformationService,$state,$ionicPopup) {
+//OAuth implementation
+.controller('exploreAPICtrl', function($scope, OAuthService,$http, $state,$interval, $cordovaInAppBrowser,StorageServiceForToken) {
+    $scope.apiClick =  function(){
+    var ref = window.cordova.InAppBrowser.open('http://169.44.112.56:8081/oauth2server/oauth/authorize?client_id=postman&redirect_uri=http://localhost/callback&scope=write&response_type=code', '_blank', 'location=no,clearsessioncache=yes,clearcache=yes,toolbar=yes');
+    ref.addEventListener('loadstart', function(event) {
+    if ((event.url).startsWith("http://localhost/callback")) {
+          $scope.requestToken = (event.url).split("code=")[1];
+          $scope.oAuth=[];
+         //Fetch general Information details from the API
+         OAuthService.general(
+           {
+             grant_type: 'authorization_code',
+             redirect_uri: 'http://localhost/callback',
+             state: '4281938',
+            code:  $scope.requestToken},
+            {
 
+            },
+            function(message) {
+               $scope.oauthData=message;
+               ref.close();
+               //Persisting the token data in local storage
+               StorageServiceForToken.remove($scope.oauthData);
+               StorageServiceForToken.add($scope.oauthData) ;
+               $state.go('menu.showAllAccounts');
+            });
+       };
+     });
+
+    if (typeof String.prototype.startsWith != 'function') {
+            String.prototype.startsWith = function (str){
+                return this.indexOf(str) == 0;
+            };
+    }
+   };
+ })
+
+
+  .controller('aboutPSD22Ctrl', function($scope, InformationService,$state,$ionicPopup) {
     $scope.general=[];
+    //Fetch general Information details from the API
     InformationService.general({value : 'general' }, {},
     function(message) {
-          $scope.general=message;
+      $scope.general=message;
       // function to retrive the response
       if($scope.general.status=='SUCCESS'){
         $scope.general=message;
-    }
+      }
     });
 
+    //Fetch  IBM information details from the API
     InformationService.general({value : 'ibm' }, {},
     function(message) {
-          $scope.ibmInformation=message;
+      $scope.ibmInformation=message;
     });
 
+    //Fetch  bookmarks from the API
     InformationService.general({value : 'bookmarks' }, {},
     function(message) {
-          $scope.bookmarks=message.response.additionalInfo;
+      $scope.bookmarks=message.response.additionalInfo;
     });
 
-})
+    $scope.encypteddata= btoa("postman:password01");
 
-.controller('profileCtrl', function($scope,StorageService) {
-  $scope.userProfile = StorageService.getAll();
-})
+  })
+
+  .controller('profileCtrl', function($scope,StorageService) {
+    $scope.userProfile = StorageService.getAll();
+  })
 
 
-.controller('loginCtrl', function($scope, $http, $resource,LoginService, $state,$ionicPopup,StorageService, $localStorage ) {
+  .controller('loginCtrl', function($scope, $http, $resource,LoginService, $state,$ionicPopup,StorageService, $localStorage ) {
 
-  $scope.click =  function(){
-    //clearing the userProfile at the time of user login
-    $scope.dataFromService=[];
-    LoginService.authenticateUser({email: this.userId, pwd: this.password}, {},
+    $scope.click =  function(){
+      //clearing the userProfile at the time of user login
+      $scope.dataFromService=[];
+      LoginService.authenticateUser({email: this.userId, pwd: this.password}, {},
+        function(message) {
+          $scope.dataFromService=message;
+          // function to retrive the response
+          if($scope.dataFromService.status=='SUCCESS'){
+            StorageService.remove($scope.dataFromService);
+            //Persisting the user data in local storage
+            StorageService.add($scope.dataFromService) ;
+            $scope.loginSuccessful="Login was successful";
+            $state.go('menu.aboutPSD22');
+          }
+        });
+      }
+    })
 
-    function(message) {
-      $scope.dataFromService=message;
-      // function to retrive the response
-      if($scope.dataFromService.status=='SUCCESS'){
-        StorageService.remove($scope.dataFromService);
-        //Persisting the user data in local storage
-        StorageService.add($scope.dataFromService) ;
-        $scope.loginSuccessful="Login was successful";
-        $state.go('menu.aboutPSD22');
-    }
-    //else if ($scope.dataFromService.status=='ERROR') {
-      // $scope.loginSuccessful="Error in call";
-      // var alertPopup = $ionicPopup.alert({
-      //        title: 'Authentication Failed!',
-      //        template:$scope.dataFromService.errMsg
-      //      });
-      //    }
-    });
-  }
-})
+    .controller('signupCtrl', function($scope, SignUpService,$state,$ionicPopup, CreateClientForOAuth ) {
+      $scope.signUpUser =  function(){
+        //clearing the userProfile at the time of user login
+      $scope.signupResponse=[];
+      //Create client for OAuth
+      CreateBankUser.createBankUser(
+        {  },
+        {
+        username: this.firstName.chartAt(0)+this.lastName,
+        password: this.password,
+        role:'USER'
+      },
+      function(message) {
+        $scope.createBankUser=message;
+        // function to retrive the response
+        if($scope.createBankUser.status=='SUCCESS'){
+        }
+      },function(message) {
+        $scope.createBankUser=message;
+      }
 
-.controller('signupCtrl', function($scope, SignUpService,$state,$ionicPopup) {
-  $scope.signUpUser =  function(){
-    //clearing the userProfile at the time of user login
-    $scope.signupResponse=[];
+    );
+
+    //calling sign up service api
     SignUpService.signup(
       {  }, {email: this.userId,
-         password: this.password,
-         role: 'USER',
-         firstName:  this.firstName,
-         lastName: this.lastName,
-         phone: this.phoneNumber
+        password: this.password,
+        role: 'USER',
+        firstName:  this.firstName,
+        lastName: this.lastName,
+        phone: this.phoneNumber
 
-        },
-
-    function(message) {
-      $scope.signupResponse=message;
-      // function to retrive the response
-      if($scope.signupResponse.status=='SUCCESS'){
-         var alertPopup = $ionicPopup.alert({
-                title: 'Signup',
-                template:'User added successfully. Please login now.'
-              });
+      },
+      function(message) {
+        $scope.signupResponse=message;
+        // function to retrive the response
+        if($scope.signupResponse.status=='SUCCESS'){
+          var alertPopup = $ionicPopup.alert({
+            title: 'Signup',
+            template:'User added successfully. Please login now.'
+          });
           $state.go('login');
+        }
+      },function(message) {
+        $scope.signupResponse=message;
+      }
+    );
 
-     }
-   },function(message) {
-     $scope.signupResponse=message;
-    }
-
-
-  );
   }
-
 })

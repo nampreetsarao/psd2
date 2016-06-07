@@ -3,8 +3,8 @@
   "app_id": "557832ed",
   "proxies": [
     {
-      "path": "/authenticate",
-      "proxyUrl": "http://169.44.9.228:8080/mcabuddy/user"
+    "path": "/account",
+    "proxyUrl": "http://169.44.112.56::8082/psd2api/banks/BARCGB/accounts/5437/owner"
     }
   ]
 }
