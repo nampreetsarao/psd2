@@ -3,14 +3,14 @@
         <ion-list class=" " id="profile-list4">
             <ion-item style="" id="profile-list-item9" class="item-icon-left">
                 <i class="icon ion-happy-outline"></i>
-                 {{userProfile[0].response.firstName}}  {{userProfile[0].response.lastName}}
+                 {{userProfile[0].data.response.firstName}}  {{userProfile[0].data.response.lastName}}
             </ion-item>
             <ion-item style="" id="profile-list-item10" class="item-icon-left ">
-                <i class="icon ion-iphone"></i>{{userProfile[0].response.phone}}</ion-item>
+                <i class="icon ion-iphone"></i>{{userProfile[0].data.response.phone}}</ion-item>
             <ion-item style="" id="profile-list-item11" class="item-icon-left  ">
-                <i class="icon ion-email"></i>{{userProfile[0].response.email}}</ion-item>
+                <i class="icon ion-email"></i>{{userProfile[0].data.response.email}}</ion-item>
             <ion-item style="" id="profile-list-item12" class="item-icon-left  ">
-                <i class="icon ion-ionic"></i>Role: {{userProfile[0].response.role}} </ion-item>
+                <i class="icon ion-ionic"></i>Role: {{userProfile[0].data.response.role}} </ion-item>
         </ion-list>
     </ion-content>
 </ion-view>

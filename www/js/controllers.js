@@ -21,7 +21,7 @@ angular.module('app.controllers', [])
       });
   	});
 
-  
+
 
   })
 
@@ -112,7 +112,7 @@ angular.module('app.controllers', [])
       $scope.bookmarks=message.response.additionalInfo;
     });
 
-    $scope.encypteddata= btoa("postman:password01");
+
 
   })
 
@@ -126,18 +126,33 @@ angular.module('app.controllers', [])
     $scope.click =  function(){
       //clearing the userProfile at the time of user login
       $scope.dataFromService=[];
-      LoginService.authenticateUser({email: this.userId, pwd: this.password}, {},
-        function(message) {
-          $scope.dataFromService=message;
-          // function to retrive the response
-          if($scope.dataFromService.status=='SUCCESS'){
-            StorageService.remove($scope.dataFromService);
-            //Persisting the user data in local storage
-            StorageService.add($scope.dataFromService) ;
-            $scope.loginSuccessful="Login was successful";
-            $state.go('menu.aboutPSD22');
-          }
+      $scope.authTokenForLogin= btoa(this.userId+":"+this.password);
+
+      $http.defaults.headers.common.Authorization="Basic "+$scope.authTokenForLogin;
+      $http.get('http://169.44.112.56:8084/psd2demoapp/user/profile').then(function(resp){
+          console.log('Success', resp);
+          $scope.dataFromService=resp;
+          // StorageService.remove($scope.dataFromService)
+          StorageService.add($scope.dataFromService) ;
+          $state.go('menu.aboutPSD22');
+           // JSON object
+          // $scope.allAccountDetails=resp;
+        }, function(err){
+          console.error('ERR', err);
+          $scope.dataFromService=err;
         });
+      // LoginService.authenticateUser({email: this.userId, pwd: this.password}, {},
+      //   function(message) {
+      //     $scope.dataFromService=message;
+      //     // function to retrive the response
+      //     if($scope.dataFromService.status=='SUCCESS'){
+      //       StorageService.remove($scope.dataFromService);
+      //       //Persisting the user data in local storage
+      //       StorageService.add($scope.dataFromService) ;
+      //       $scope.loginSuccessful="Login was successful";
+      //       $state.go('menu.aboutPSD22');
+      //     }
+      //   });
       }
     })
 
