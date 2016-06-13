@@ -1,27 +1,18 @@
-var gulp    = require('gulp');
-var gutil    = require('gulp-util');
-var replace = require('gulp-replace-task');
-var args    = require('yargs').argv;
-var fs      = require('fs');
+var preprocess = require('gulp-preprocess');
+gulp.task('dev', function() {
+  gulp.src('./template/appsettings.js')
+    .pipe(preprocess({context: { NODE_ENV: 'DEVELOPMENT', DEBUG: true}}))
+    .pipe(gulp.dest('./www/js/'));
+});
 
-gulp.task('replace', function () {
-  // Get the environment from the command line
-  var env = args.env || 'localdev';
+gulp.task('test_env', function() {
+  gulp.src('./template/appsettings.js')
+    .pipe(preprocess({context: { NODE_ENV: 'TEST', DEBUG: true}}))
+    .pipe(gulp.dest('./www/js/'));
+});
 
-  // Read the settings from the right file
-  var filename = env + '.json';
-  var settings = JSON.parse(fs.readFileSync('./config/' + filename, 'utf8'));
-  gutil.log('file name:'+ filename);
-  gutil.log('URL to be replaced:'+ settings.apiUrl);
-  // Replace each placeholder with the correct value for the variable.
-  gulp.src('./www/js/app-constants.js')
-  .pipe(replace({
-    patterns: [
-      {
-        match: 'apiUrl',
-        replacement: settings.apiUrl
-      }
-    ]
-  }))
-  .pipe(gulp.dest('build/js'));
+gulp.task('prod', function() {
+  gulp.src('./template/appsettings.js')
+    .pipe(preprocess({context: { NODE_ENV: 'PRODUCTION'}}))
+    .pipe(gulp.dest('./www/js/'));
 });

@@ -1,6 +1,21 @@
 angular.module('app.controllers', [])
 
-.controller('showAllAccountCtrl', function($scope,StorageServiceForToken,$state,$http,AccountDetails,$resource,$ionicPopup) {
+.controller('LoadingCtrl', function($scope, $ionicLoading) {
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    }).then(function(){
+       console.log("The loading indicator is now displayed");
+    });
+  };
+  $scope.hide = function(){
+    $ionicLoading.hide().then(function(){
+       console.log("The loading indicator is now hidden");
+    });
+  };
+})
+
+.controller('showAllAccountCtrl', function($scope,StorageServiceForToken,$state,$http,AccountDetails,$resource,$ionicPopup,$ionicLoading) {
   $scope.allAccountDetails=[];
   $scope.oauthData = StorageServiceForToken.getAll();
   if($scope.oauthData!=null){
@@ -121,15 +136,21 @@ angular.module('app.controllers', [])
   })
 
 
-  .controller('loginCtrl', function($scope, $http, $resource,LoginService, $state,$ionicPopup,StorageService, $localStorage ) {
+  .controller('makeAPaymentCtrl', function($scope) {
+  })
+
+
+  .controller('loginCtrl', function($scope, $http, $resource,LoginService, $state,$ionicPopup,StorageService, $localStorage,$ionicLoading ) {
 
     $scope.click =  function(){
+      $ionicLoading.show({templateUrl:"templates/loading.html"});
       //clearing the userProfile at the time of user login
       $scope.dataFromService=[];
       $scope.authTokenForLogin= btoa(this.userId+":"+this.password);
 
       $http.defaults.headers.common.Authorization="Basic "+$scope.authTokenForLogin;
       $http.get('http://169.44.112.56:8084/psd2demoapp/user/profile').then(function(resp){
+          $ionicLoading.hide();
           console.log('Success', resp);
           $scope.dataFromService=resp;
           // StorageService.remove($scope.dataFromService)
@@ -140,6 +161,7 @@ angular.module('app.controllers', [])
         }, function(err){
           console.error('ERR', err);
           $scope.dataFromService=err;
+          $ionicLoading.hide();
         });
       // LoginService.authenticateUser({email: this.userId, pwd: this.password}, {},
       //   function(message) {
@@ -156,24 +178,27 @@ angular.module('app.controllers', [])
       }
     })
 
-    .controller('signupCtrl', function($scope, SignUpService,$state,$ionicPopup, CreateClientForOAuth ) {
+    .controller('signupCtrl', function($scope, CreateBankUser, SignUpService,$state,$ionicPopup, CreateClientForOAuth, $ionicLoading ) {
       $scope.signUpUser =  function(){
+      $ionicLoading.show({templateUrl:"templates/loading.html"});
         //clearing the userProfile at the time of user login
       $scope.signupResponse=[];
       //Create client for OAuth
       CreateBankUser.createBankUser(
         {  },
         {
-        username: this.firstName.chartAt(0)+this.lastName,
+        username: this.firstName.charAt(0)+this.lastName,
         password: this.password,
         role:'USER'
       },
       function(message) {
         $scope.createBankUser=message;
+        $ionicLoading.hide();
         // function to retrive the response
         if($scope.createBankUser.status=='SUCCESS'){
         }
       },function(message) {
+        $ionicLoading.hide();
         $scope.createBankUser=message;
       }
 

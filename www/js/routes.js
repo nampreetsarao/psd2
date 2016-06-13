@@ -77,6 +77,15 @@ angular.module('app.routes', [])
   }
   })
 
+  .state('menu.makeAPayment', {
+  url: '/makeAPayment',
+  views: {
+  'side-menu21': {
+    templateUrl: 'templates/makeAPayment.html',
+    controller: 'makeAPaymentCtrl'
+  }
+  }
+  })
 
 
 $urlRouterProvider.otherwise('/login')
