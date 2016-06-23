@@ -1,0 +1,66 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'cordova',
+1 verbose cli   'ionic' ]
+2 info using npm@2.15.5
+3 info using node@v4.4.5
+4 verbose install initial load of C:\Users\IBM_ADMIN\AppData\Roaming\npm\package.json
+5 verbose readDependencies loading dependencies from C:\Users\IBM_ADMIN\AppData\Roaming\npm\package.json
+6 silly cache add args [ 'cordova', null ]
+7 verbose cache add spec cordova
+8 silly cache add args [ 'ionic', null ]
+9 verbose cache add spec ionic
+10 silly cache add parsed spec Result {
+10 silly cache add   raw: 'cordova',
+10 silly cache add   scope: null,
+10 silly cache add   name: null,
+10 silly cache add   rawSpec: 'cordova',
+10 silly cache add   spec: 'C:\\NPS\\ibmDev\\psd2\\ionic\\psd2\\cordova',
+10 silly cache add   type: 'local' }
+11 silly cache add parsed spec Result {
+11 silly cache add   raw: 'ionic',
+11 silly cache add   scope: null,
+11 silly cache add   name: null,
+11 silly cache add   rawSpec: 'ionic',
+11 silly cache add   spec: 'C:\\NPS\\ibmDev\\psd2\\ionic\\psd2\\ionic',
+11 silly cache add   type: 'local' }
+12 silly addLocalTarball shasum (computed) 9a3c7172c80b25e47c56efc51164ef0aefeefb9a
+13 verbose addTmpTarball C:\NPS\ibmDev\psd2\ionic\psd2\cordova not in flight; adding
+14 silly addLocalTarball shasum (computed) f8ef8a00b0c789a2f3cacd27141966ca96491063
+15 verbose addTmpTarball C:\NPS\ibmDev\psd2\ionic\psd2\ionic not in flight; adding
+16 verbose correctMkdir C:\Users\IBM_ADMIN\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 verbose correctMkdir C:\Users\IBM_ADMIN\AppData\Roaming\npm-cache correctMkdir already in flight; waiting
+18 verbose addTmpTarball validating metadata from C:\NPS\ibmDev\psd2\ionic\psd2\cordova
+19 verbose tar unpack C:\NPS\ibmDev\psd2\ionic\psd2\cordova
+20 verbose tar unpacking to C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-3fe90a43ad51
+21 silly gentlyRm C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-3fe90a43ad51 is being purged
+22 verbose gentlyRm don't care about contents; nuking C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-3fe90a43ad51
+23 verbose addTmpTarball validating metadata from C:\NPS\ibmDev\psd2\ionic\psd2\ionic
+24 verbose tar unpack C:\NPS\ibmDev\psd2\ionic\psd2\ionic
+25 verbose tar unpacking to C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-79ffcb430fd1
+26 silly gentlyRm C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-79ffcb430fd1 is being purged
+27 verbose gentlyRm don't care about contents; nuking C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-79ffcb430fd1
+28 silly gunzTarPerm modes [ '777', '666' ]
+29 silly gunzTarPerm modes [ '777', '666' ]
+30 error not a package C:\NPS\ibmDev\psd2\ionic\psd2\ionic
+31 error addLocal Could not install C:\NPS\ibmDev\psd2\ionic\psd2\ionic
+32 error not a package C:\NPS\ibmDev\psd2\ionic\psd2\cordova
+33 error addLocal Could not install C:\NPS\ibmDev\psd2\ionic\psd2\cordova
+34 verbose stack Error: ENOENT: no such file or directory, open 'C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-79ffcb430fd1\package.json'
+34 verbose stack     at Error (native)
+35 verbose cwd C:\NPS\ibmDev\psd2\ionic\psd2
+36 error Windows_NT 6.1.7601
+37 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "-g" "cordova" "ionic"
+38 error node v4.4.5
+39 error npm  v2.15.5
+40 error path C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-79ffcb430fd1\package.json
+41 error code ENOENT
+42 error errno -4058
+43 error syscall open
+44 error enoent ENOENT: no such file or directory, open 'C:\Users\IBM_AD~1\AppData\Local\Temp\npm-5468-d1c050b8\unpack-79ffcb430fd1\package.json'
+44 error enoent This is most likely not a problem with npm itself
+44 error enoent and is related to npm not being able to find a file.
+45 verbose exit [ -4058, true ]
