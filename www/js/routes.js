@@ -8,6 +8,9 @@ angular.module('app.routes', [])
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+
+  
+
       .state('menu.profile', {
     url: '/page6',
     views: {
@@ -87,6 +90,16 @@ angular.module('app.routes', [])
   }
   })
 
+
+  .state('menu.transactionDetails', {
+    url: '/transactionDetails',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/transactionDetails.html',
+        controller: 'transactionDetailsCtrl'
+      }
+    }
+    })
 
 $urlRouterProvider.otherwise('/login')
 });

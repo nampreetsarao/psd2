@@ -85,7 +85,7 @@ angular.module('app.controllers', [])
             },
             function(message) {
                $scope.oauthData=message;
-               ref.close();
+               ref.close();options
                //Persisting the token data in local storage
                StorageServiceForToken.remove($scope.oauthData);
                StorageServiceForToken.add($scope.oauthData) ;
@@ -136,9 +136,140 @@ angular.module('app.controllers', [])
   })
 
 
-  .controller('makeAPaymentCtrl', function($scope) {
+  .controller('makeAPaymentCtrl', function($scope, $http, $ionicLoading, StorageServiceForToken) {
+      // $scope.makePaymentObj = {
+      //   "fromAcc":"",
+      //   "toAcc":"",
+      //   "amt":"",
+      //   "desc":"",
+      //   "type":""
+      // };
+
+      $scope.makePaymentObj = {
+          "type": "",
+          "from": {
+              "bank_id": "",
+              "account_id": ""
+          },
+          "to":{
+              "bank_id":"",
+              "account_id":""
+            },  
+          "value":{
+              "currency":"",
+              "amount":""
+            },
+          "description":""
+      }
+
+
+      $scope.transactionTypes = [];
+      
+       $scope.oauthData = StorageServiceForToken.getAll();
+        if($scope.oauthData!=null && $scope.oauthData.length>0){
+            $scope.authorizationToken = 'Bearer '+ $scope.oauthData[0].access_token;
+        }else{
+          $scope.accountDetails='First authenticate and then make this call.';
+        }
+        $http.defaults.headers.common.Authorization="Bearer d8494a26-df21-4c3e-ace3-ff701bf8c4b4";
+        $ionicLoading.show();
+      $http.get('http://169.44.112.56:8082/psd2api/banks/BARCGB/accounts/5437/owner/transaction-request-types').then(function(resp){
+          $ionicLoading.hide();
+          console.log('Success', resp);
+          $scope.transactionTypes = resp.data;
+        }, function(err){
+          console.error('ERR', err);
+          $ionicLoading.hide();
+        });
+
+      $scope.paymentSubmit = function(){
+        console.log($scope.makePaymentObj);
+        $scope.oauthData = StorageServiceForToken.getAll();
+        if($scope.oauthData!=null && $scope.oauthData.length>0){
+            $scope.authorizationToken = 'Bearer '+ $scope.oauthData[0].access_token;
+        }else{
+          $scope.accountDetails='First authenticate and then make this call.';
+        }
+
+        $http.defaults.headers.common.Authorization=$scope.authorizationToken;  
+        //$http.defaults.headers.common.Authorization="Bearer d8494a26-df21-4c3e-ace3-ff701bf8c4b4";
+         $http.post("http://169.44.112.56:8082/psd2api/banks/BARCGB/accounts/5437/owner/transaction-request-types/INTER_BANK/transaction-requests", $scope.makePaymentObj, {
+            
+        }).success(function(responseData) {
+            //do stuff with response
+            $ionicLoading.hide();
+            console.log('Success', responseData);
+            alert("Successful Transaction");
+        });
+
+
+
+        // $http.get('http://169.44.112.56:8082/psd2api/banks/BARCGB/accounts/5437/owner/transaction-request-types/INTER_BANK/transaction-requests').then(function(resp){
+        //   $ionicLoading.hide();
+        //   console.log('Success', resp);
+        // }, function(err){
+        //   console.error('ERR', err);
+        //   $ionicLoading.hide();
+        // });
+
+      };
+
   })
 
+
+  .controller('transactionDetailsCtrl', function($scope) {
+    $scope.options= {  
+          chart: {
+            type: 'pieChart',
+            height: 500,
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+            showLabels: true,
+            duration: 500,
+            labelThreshold: 0.01,
+            labelSunbeamLayout: true,
+            legend: {
+              margin: {
+                top: 5,
+                right: 35,
+                bottom: 5,
+                left: 0
+              }
+            }
+          }
+    };
+
+    $scope.data = [  
+                        {
+                          key: "One",
+                          y: 5
+                        },
+                        {
+                          key: "Two",
+                          y: 2
+                        },
+                        {
+                          key: "Three",
+                          y: 9
+                        },
+                        {
+                          key: "Four",
+                          y: 7
+                        },
+                        {
+                          key: "Five",
+                          y: 4
+                        },
+                        {
+                          key: "Six",
+                          y: 3
+                        },
+                        {
+                          key: "Seven",
+                          y: .5
+                        }
+                    ];
+  })
 
   .controller('loginCtrl', function($scope, $http, $resource,LoginService, $state,$ionicPopup,StorageService, $localStorage,$ionicLoading ) {
 
